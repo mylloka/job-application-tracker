@@ -17,6 +17,7 @@ Setup
 
 Demo Video
 
+Please check demo video of the website in the repository.
 
 AI Usage
 See AI_USAGE.md for details about how I used ChatGPT.
