@@ -3,9 +3,9 @@ Job Application Tracker
 This is my database project for COP4751. I used Python, Flask, MySQL, HTML, and CSS to create a website that tracks job applications.
 
 Features
-- Add, edit, view, and delete companies, jobs, applications, and contacts
-- Dashboard with statistics
-- Job Match based on skills
+Add, edit, view, and delete companies, jobs, applications, and contacts
+Dashboard with statistics
+Job Match based on skills
 
 Setup
 1. Install Python and MySQL.
