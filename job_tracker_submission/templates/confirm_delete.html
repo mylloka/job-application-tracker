@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Confirm Delete{% endblock %}
+{% block content %}
+<section class="panel form-panel"><p class="eyebrow">CONFIRMATION</p><h1>Delete {{ config.singular }} #{{ record_id }}?</h1><p>This cannot be undone. MySQL will block deleting records that still have related records.</p>
+<form method="post" action="{{ url_for('delete_record', table=table, record_id=record_id) }}"><div class="form-actions"><button class="btn btn-danger" type="submit">Yes, Delete Record</button><a class="btn btn-secondary" href="{{ url_for('record_detail', table=table, record_id=record_id) }}">Cancel</a></div></form></section>
+{% endblock %}

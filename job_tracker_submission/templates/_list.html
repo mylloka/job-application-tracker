@@ -1,0 +1,18 @@
+<div class="page-heading"><div><p class="eyebrow">DATABASE</p><h1>{{ config.label }}</h1><p class="muted">View and manage records in your {{ table }} table.</p></div><a class="btn" href="{{ url_for('add_record', table=table) }}">+ Add {{ config.singular }}</a></div>
+<section class="panel">
+{% if records %}
+<div class="table-wrap"><table><thead><tr>
+{% if table == 'companies' %}<th>Name</th><th>Industry</th><th>Location</th>
+{% elif table == 'jobs' %}<th>Job Title</th><th>Company</th><th>Type</th><th>Salary</th>
+{% elif table == 'applications' %}<th>Job</th><th>Company</th><th>Date</th><th>Status</th>
+{% else %}<th>Name</th><th>Company</th><th>Title</th><th>Email</th>{% endif %}
+<th class="actions">Actions</th></tr></thead><tbody>
+{% for record in records %}<tr>
+{% if table == 'companies' %}<td><strong>{{ record.company_name }}</strong></td><td>{{ record.industry or '—' }}</td><td>{{ (record.city or '') ~ (', ' if record.city and record.state else '') ~ (record.state or '') or '—' }}</td>
+{% elif table == 'jobs' %}<td><strong>{{ record.job_title }}</strong></td><td>{{ record.company_name or '—' }}</td><td>{{ record.job_type or '—' }}</td><td>{% if record.salary_min is not none %}${{ '{:,}'.format(record.salary_min) }}{% else %}—{% endif %}{% if record.salary_max is not none %} – ${{ '{:,}'.format(record.salary_max) }}{% endif %}</td>
+{% elif table == 'applications' %}<td><strong>{{ record.job_title or '—' }}</strong></td><td>{{ record.company_name or '—' }}</td><td>{{ record.application_date }}</td><td><span class="pill">{{ record.status or '—' }}</span></td>
+{% else %}<td><strong>{{ record.contact_name }}</strong></td><td>{{ record.company_name or '—' }}</td><td>{{ record.title or '—' }}</td><td>{{ record.email or '—' }}</td>{% endif %}
+<td class="actions"><a href="{{ url_for('record_detail', table=table, record_id=record[config.pk]) }}">View</a><a href="{{ url_for('edit_record', table=table, record_id=record[config.pk]) }}">Edit</a><a class="danger-link" href="{{ url_for('delete_record', table=table, record_id=record[config.pk]) }}">Delete</a></td>
+</tr>{% endfor %}</tbody></table></div>
+{% else %}<div class="empty"><p>No {{ table }} found.</p><a class="btn" href="{{ url_for('add_record', table=table) }}">Add your first record</a></div>{% endif %}
+</section>

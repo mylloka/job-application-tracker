@@ -1,0 +1,30 @@
+{% for field, label, kind, max_len in config.fields %}
+<div class="field">
+<label for="{{ field }}">{{ label }}{% if field in config.required %} <span class="required">*</span>{% endif %}</label>
+{% set value = record.get(field) %}
+{% if kind == 'company_fk' %}
+<select name="{{ field }}" id="{{ field }}" {% if field in config.required %}required{% endif %}>
+<option value="">Select a company</option>
+{% for company in companies %}<option value="{{ company.company_id }}" {% if value|string == company.company_id|string %}selected{% endif %}>{{ company.company_name }}</option>{% endfor %}
+</select>
+{% elif kind == 'job_fk' %}
+<select name="{{ field }}" id="{{ field }}" {% if field in config.required %}required{% endif %}>
+<option value="">Select a job</option>
+{% for job in jobs %}<option value="{{ job.job_id }}" {% if value|string == job.job_id|string %}selected{% endif %}>{{ job.company_name or 'Unassigned' }} — {{ job.job_title }}</option>{% endfor %}
+</select>
+{% elif kind == 'job_enum' or kind == 'status_enum' %}
+<select name="{{ field }}" id="{{ field }}"><option value="">Select {{ label|lower }}</option>
+{% for item in (job_types if kind == 'job_enum' else statuses) %}<option value="{{ item }}" {% if value == item %}selected{% endif %}>{{ item }}</option>{% endfor %}
+</select>
+{% elif kind == 'checkbox' %}
+<label class="inline-check"><input type="checkbox" name="{{ field }}" id="{{ field }}" {% if value == 1 or value == true or value == 'on' or value == '1' %}checked{% endif %}> Yes, a cover letter was sent</label>
+{% elif kind in ['textarea','requirements_json','interview_json'] %}
+<textarea name="{{ field }}" id="{{ field }}" rows="4" placeholder="{% if kind == 'requirements_json' %}{&quot;skills&quot;: [&quot;Python&quot;, &quot;SQL&quot;]}{% elif kind == 'interview_json' %}{&quot;date&quot;: &quot;2026-11-20&quot;, &quot;notes&quot;: &quot;Phone interview&quot;}{% else %}Optional notes{% endif %}">{{ value if value is not none else '' }}</textarea>
+{% if kind == 'requirements_json' %}<small>For Job Match, use a JSON object with a <code>skills</code> list. Example: {"skills": ["Python", "SQL"]}</small>{% endif %}
+{% elif kind == 'number' %}
+<input type="number" name="{{ field }}" id="{{ field }}" min="0" step="1" value="{{ value if value is not none else '' }}">
+{% else %}
+<input type="{{ kind }}" name="{{ field }}" id="{{ field }}" value="{{ value if value is not none else '' }}" {% if max_len %}maxlength="{{ max_len }}"{% endif %} {% if field in config.required %}required{% endif %}>
+{% endif %}
+</div>
+{% endfor %}

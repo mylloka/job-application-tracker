@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Job Match{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">SKILL ANALYSIS</p><h1>Job Match</h1><p class="muted">Find opportunities that match your skills, ranked by percentage.</p></div></div>
+<section class="panel form-panel"><form method="post" action="{{ url_for('job_match') }}"><div class="field"><label for="skills">Your skills (comma-separated)</label><input name="skills" id="skills" type="text" value="{{ entered }}" placeholder="Python, SQL, Flask" required><small>Matching ignores capitalization and extra spaces.</small></div><button class="btn" type="submit">Find Matching Jobs</button></form></section>
+{% if submitted %}
+<section class="panel"><div class="section-title"><h2>Ranked results</h2><span class="muted">{{ results|length }} jobs</span></div>
+{% for job in results %}<div class="match-result"><div class="match-top"><div><h3>{{ job.job_title }}</h3><p class="muted">{{ job.company_name or 'Unassigned company' }}</p></div><strong class="match-percent">{{ job.percentage }}%</strong></div><div class="progress"><span style="width: {{ job.percentage }}%"></span></div><p><strong>{{ job.matched|length }}/{{ job.total }}</strong> required skills matched</p>
+<p class="muted">Matched: {{ job.matched|join(', ') if job.matched else 'None' }}</p><p class="muted">Missing: {{ job.missing|join(', ') if job.missing else 'None' }}</p>
+{% if not job.total %}<p class="muted">No required skills listed for this job (shown as 0%).</p>{% endif %}
+<a href="{{ url_for('record_detail', table='jobs', record_id=job.job_id) }}">View job details</a></div>{% else %}<p class="empty">No jobs available. Add jobs with JSON skill requirements first.</p>{% endfor %}</section>
+{% endif %}
+{% endblock %}

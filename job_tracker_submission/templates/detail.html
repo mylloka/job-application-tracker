@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ config.singular }} Details{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">RECORD DETAILS</p><h1>{{ config.singular }} #{{ record[config.pk] }}</h1></div><div class="button-row"><a class="btn" href="{{ url_for('edit_record', table=table, record_id=record[config.pk]) }}">Edit</a><a class="btn btn-danger" href="{{ url_for('delete_record', table=table, record_id=record[config.pk]) }}">Delete</a></div></div>
+<section class="panel details"><dl>
+{% for field, label, kind, max_len in config.fields %}
+<dt>{{ label }}</dt><dd>{% if record[field] is none %}—{% elif kind == 'checkbox' %}{{ 'Yes' if record[field] else 'No' }}{% else %}{{ record[field] }}{% endif %}</dd>
+{% endfor %}
+</dl></section>
+<a class="back" href="{{ url_for('list_records', table=table) }}">← Back to {{ config.label }}</a>
+{% endblock %}
