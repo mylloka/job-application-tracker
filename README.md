@@ -16,8 +16,7 @@ Setup
 6. Open http://127.0.0.1:5000/.
 
 Demo Video
-
-Please check demo video of the website in the repository.
+https://www.youtube.com/watch?v=-GFU1IZBRYQ
 
 AI Usage
 See AI_USAGE.md for details about how I used ChatGPT.
